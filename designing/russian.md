@@ -401,6 +401,18 @@ ___
 ```
 ___
 
+##### func version() string, string 
+***Название:*** version  
+***Возвращаемое значение:*** версия языка и версия СУБД  
+***Описание:*** Возвращает две строки с версией VQL и версией СУБД.  
+***Пример:***  
+```vql
+    $vql, $dbms = version()
+    log("INFO", "VQL  version: ".$vql)
+    log("INFO", "DBMS version: ".$dbms)
+```
+___
+
 
 #### DDF — функции определения данных (Data Definition Functions) 
 
