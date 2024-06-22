@@ -427,7 +427,6 @@ ___
 ```vql
     $ok, $err = create-db("dbName")
 ```
-
 ```vql
     $ok, $err = create-db($1)
 ```
@@ -440,17 +439,158 @@ ___
 ***Описание:*** Создание таблицы с заданым именем и с набором заданых столбцов. Перед выполнением обязательно нужно выполнить use(dbName, "").  
 ***Пример:***  
 ```vql
+    use("dbName", "")
     $ok, $err = create-table("tableName", ["name", "age", "sex", "prof", "comment"])
 ```
-
 ```vql
-    $ok, $err = create-table($1, $2)
+    use($1, "")
+    $ok, $err = create-table($2, $3)
+```
+___
+
+##### func alter-db-rename( \$oldName string, \$newName string ) boolean, error 
+***Название:*** alter-db-rename  
+***Аргументы:*** старое и новое имя базы данных  
+***Возвращаемое значение:*** признак выполнения операции и код ошибки  
+***Описание:*** Изменение имени базы дынных.  
+***Пример:***  
+```vql
+    $ok, $err = alter-db-rename("dbName", "newDbName")
+```
+```vql
+    $ok, $err = alter-db-rename($1, $2)
+```
+___
+
+##### func alter-table-rename( \$oldName string, \$newName string ) boolean, error 
+***Название:*** alter-table-rename  
+***Аргументы:*** старое и новое имя таблицы  
+***Возвращаемое значение:*** признак выполнения операции и код ошибки  
+***Описание:*** Изменение имени таблицы в базе дынных.  
+***Пример:***  
+```vql
+    use("dbName", "")
+    $ok, $err = alter-table-rename("tableName", "newTableName")
+```
+```vql
+    use("dbName", "")
+    $ok, $err = alter-table-rename($1, $2)
+```
+___
+
+##### func alter-table-add( \$colName string, \$sett object ) boolean, error 
+***Название:*** alter-table-add  
+***Аргументы:*** имя нового столбца в таблице и его характеристики  
+***Возвращаемое значение:*** признак выполнения операции и код ошибки  
+***Описание:*** Добавление нового столбца в текущую рабочую таблицу. Характеристики столбца могут быть пустым объектом, либо заполненый различным способом зависящим от возможностей СУБД.  
+***Пример:***  
+```vql
+    use("shop", "customers")
+    $ok, $err = alter-table-add("city", {})
+```
+```vql
+    use("shop", "customers")
+    $ok, $err = alter-table-add("city", {"Default": "Moscow", "NotNull": true, "Unique": false} )
+```
+```vql
+    use($1, $2)
+    $ok, $err = alter-table-add($3, $4)
+```
+___
+
+##### func alter-table-drop( \$colName string ) boolean, error 
+***Название:*** alter-table-drop  
+***Аргументы:*** имя удаляемого столбца в таблице  
+***Возвращаемое значение:*** признак выполнения операции и код ошибки  
+***Описание:*** Удаление столбца из текущей рабочей таблицы.  
+***Пример:***  
+```vql
+    use("shop", "customers")
+    $ok, $err = alter-table-drop("city")
+```
+```vql
+    use($1, $2)
+    $ok, $err = alter-table-drop($3)
+```
+___
+
+##### func alter-table-modify( \$colName string, \$sett object ) boolean, error 
+***Название:*** alter-table-modify  
+***Аргументы:*** имя изменяемого столбца в таблице и набор его характеристик  
+***Возвращаемое значение:*** признак выполнения операции и код ошибки  
+***Описание:*** Изменение набора характеристик столбца из текущей рабочей таблицы.  
+```vql
+    use("shop", "customers")
+    $ok, $err = alter-table-modify("city", {"Default": "Moscow", "NotNull": true, "Unique": false} )
+```
+```vql
+    use($1, $2)
+    $ok, $err = alter-table-modify($3, $4)
+```
+___
+
+##### func alter-table-modify-rename( \$colOldName string, \$colNewName string ) boolean, error 
+***Название:*** alter-table-modify-rename  
+***Аргументы:*** старое и новое имя столбца  
+***Возвращаемое значение:*** признак выполнения операции и код ошибки  
+***Описание:*** Переименование столбца из текущей рабочей таблицы.  
+```vql
+    use("manage", "users")
+    $ok, $err = alter-table-modify-rename("login", "username" )
+```
+```vql
+    use($1, $2)
+    $ok, $err = alter-table-modify-rename($3, $4)
+```
+___
+
+##### func drop-db( \$db string ) boolean, error 
+***Название:*** drop-db  
+***Аргументы:*** имя базы данных  
+***Возвращаемое значение:*** признак выполнения операции и код ошибки  
+***Описание:*** Удаление базы дынных с заданым именем.  
+***Пример:***  
+```vql
+    $ok, $err = drop-db("dbName")
+```
+```vql
+    $ok, $err = drop-db($1)
+```
+___
+
+##### func drop-table( \$table string ) boolean, error 
+***Название:*** drop-table  
+***Аргументы:*** имя таблицы  
+***Возвращаемое значение:*** признак выполнения операции и код ошибки  
+***Описание:*** Удаление таблицы с заданым именем из текущей рабочей БД.  
+***Пример:***  
+```vql
+    use("dbName", "")
+    $ok, $err = drop-table("tableName")
+```
+```vql
+    use($1, "")
+    $ok, $err = drop-table($2)
 ```
 ___
 
 
 #### DMF — функции изменения данных (Data Manipulation Functions) 
 
+SELECT	Извлекает записи из одной или нескольких таблиц
+INSERT	Создает записи
+UPDATE	Модифицирует записи
+DELETE	Удаляет записи
+
+очистка таблицы
+TRUNCATE TABLE tableName;
+
+транзакции должны быть в директивах
+BEGIN|START TRANSACTION — запуск транзакции
+завершения транзакции
+COMMIT;
+отмена изменений
+ROLLBACK;
 
 #### DCF — функции управления данными (Data Control Functions) 
 
@@ -630,21 +770,4 @@ ___
     $ok, $err = revoke($dbs, $users, $privs)
 ```
 ___
-
-
-## Старое как в SQL 
-
-### DDL — язык определения данных (Data Definition Language) 
-
-CREATE	Создает новую таблицу, представление таблицы или другой объект в БД
-ALTER	Модифицирует существующий в БД объект, такой как таблица
-DROP	Удаляет существующую таблицу, представление таблицы или другой объект в БД
-
-
-### DML — язык изменения данных (Data Manipulation Language) 
-
-SELECT	Извлекает записи из одной или нескольких таблиц
-INSERT	Создает записи
-UPDATE	Модифицирует записи
-DELETE	Удаляет записи
 
