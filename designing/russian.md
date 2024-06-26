@@ -333,6 +333,25 @@ ___
 ```
 ___
 
+TODO: адекватный пример транзакции  
+***Директива:*** transaction _operations_ rollback _operations_ commit  
+***Аргументы:*** операции  
+***Описание:*** Атомарное выполнение нескольких связанных операций. Начинает транзакцию, отменяет операции и подтверждает выполнение операций. Субдирективы rollback и commit завершают транзакцию.  
+***Пример:***  
+```vql
+    use("shop", "customers")
+    $idsСustomers = where "age" >= 18 AND "city" == "Moscow"
+
+    transaction
+
+
+    rollback
+
+    commit
+
+```
+___
+
 ***Директива:*** response  
 ***Аргументы:*** переменная с данными  
 ***Описание:*** Прерывает выполнение запроса и отправляет клиенту объект возврата соответствующий конкретной СУБД.  
@@ -577,20 +596,123 @@ ___
 
 #### DMF — функции изменения данных (Data Manipulation Functions) 
 
-SELECT	Извлекает записи из одной или нескольких таблиц
-INSERT	Создает записи
-UPDATE	Модифицирует записи
-DELETE	Удаляет записи
+___
 
-очистка таблицы
-TRUNCATE TABLE tableName;
+##### func select( \$fields []string, $where []number) []{}, error 
+***Название:*** select  
+***Аргументы:*** массив названий полей для выборки и массив идентификаторов _id  
+***Возвращаемое значение:*** массив объектов и код ошибки  
+***Описание:*** Извлекает записи из текущей рабочей таблицы. Получает массив строк с названими извлекаемых ячеек и массив уникальных идентификаторов записей. Ответ представляет собой массив записей. Каждая запись это объект в котором именем поля является название ячейки записи из рабочей таблицы, а значением поля является извлекаемое значение. Если массив полей пустой, то выбираются все поля. Если массив идентификаторов пустой, по выборка охватывает всю таблицу.  
+***Пример:***  
+```vql
+    use("shop", "customers")
+    $idsСustomers = where "age" >= 18 AND "city" == "Moscow" limit 0, 100
 
-транзакции должны быть в директивах
-BEGIN|START TRANSACTION — запуск транзакции
-завершения транзакции
-COMMIT;
-отмена изменений
-ROLLBACK;
+    $data, $err = select(["login", "name", "surname", "age", "city"], $idsСustomers)
+```
+```vql
+    use($1, $2)
+    $idsСustomers = where "age" >= $3 AND "city" == $4 limit 0, 100
+
+    $data, $err = select(["login", "name", "surname", "age", "city"], $idsСustomers)
+```
+```vql
+    use($1, $2)
+    $idsСustomers = where "age" >= $3 AND "city" == $4 limit 0, 100
+
+    $data, $err = select([], $idsСustomers)
+```
+```vql
+    func selectAll( $nameDb string, $nameTab string) []{}, error {
+        use($nameDb, $nameTab)
+        $inData, $err = select([], [])
+        return $inData, $err
+    }
+
+    store selectAll
+```
+___
+
+##### func insert( \$records []{}) []number, error 
+***Название:*** insert  
+***Аргументы:*** массив объектов для создания новых записей из названий полей и их значений  
+***Возвращаемое значение:*** массив уникальных идентификаторов созданных записей и код ошибки  
+***Описание:*** Создает одну или несколько записей в текущей рабочей таблице. Получает массив обхектов из названий полей и их значений, которые нужно вставить в таблицу как новую запись. Ответ представляет собой массив идентификаторов новых записей.  
+***Пример:***  
+```vql
+    use("shop", "customers")
+    
+    $insId, $err = insert( [{"login": "kwynto", "name": "Constantine", "surname": "Zavezeon", "age": 42, "city": "Kyrsk"}] )
+```
+```vql
+    use($1, $2)
+    $record = [{"login": $3, "name": $4, "surname": $5, "age": $6, "city": $7}]
+
+    $insId, $err = insert($record)
+```
+```vql
+    use($1, $2)
+    
+    $insId, $err = insert($3)
+```
+___
+
+##### func update( \$fields {}, \$where []number) error 
+***Название:*** update  
+***Аргументы:*** объект c названиями полей и новыми значениями, и массив идентификаторов _id изменяемых записей  
+***Возвращаемое значение:*** код ошибки  
+***Описание:*** Модифицирует записи в текущей рабочей таблице.  
+***Пример:***  
+```vql
+    use("shop", "customers")
+    $idsСustomers = where "city" == "Nur-Sultan"
+    
+    $err = update( {"city": "Astana"}, $idsСustomers )
+```
+```vql
+    use($1, $2)
+    $idsСustomers = where "city" == $3
+    
+    $err = update( {"city": $4}, $idsСustomers )
+```
+```vql
+    func renameTheCity( $nameDb string, $nameTab string, $oldNameCity string, $newNameCity string ) error {
+        use($nameDb, $nameTab)
+        $idsСustomers = where "city" == $oldNameCity
+        $err = update( {"city": $newNameCity}, $idsСustomers )
+        return $err
+    }
+
+    store renameTheCity
+```
+___
+
+##### func delete( \$where []number) error 
+***Название:*** delete  
+***Аргументы:*** массив идентификаторов _id удаляемых записей  
+***Возвращаемое значение:*** код ошибки  
+***Описание:*** Удаляет записи.  
+***Пример:***  
+```vql
+    use("shop", "customers")
+    $idsСustomers = where "ban" == true
+    
+    $err = delete( $idsСustomers )
+```
+___
+
+##### func truncate() error 
+***Название:*** truncate  
+***Возвращаемое значение:*** код ошибки  
+***Описание:*** Очистка таблицы (удаление всех записей). Не влияет на инкрементные идентификаторы, только удаляет записи с данными.  
+***Пример:***  
+```vql
+    use("shop", "customers")
+        
+    $err = truncate()
+```
+___
+
 
 #### DCF — функции управления данными (Data Control Functions) 
 
