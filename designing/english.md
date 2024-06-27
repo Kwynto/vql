@@ -7,4 +7,4 @@ This is a description of a vulgar query language (VQL) for database management s
 VQL is a simple declarative language for working with databases, free from frills and helping to make simple, understandable and effective queries.  
 
 ***Revision:*** 
-VQL-24 0.0.1  
+VQL-24:1  
