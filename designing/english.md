@@ -932,3 +932,21 @@ ___
 ```
 ___
 
+
+## Query optimization 
+
+VQL is designed to unify the query language and stored procedures.  
+This feature of the language allows you to develop software interfaces for interacting with any particular database in the most optimal way.  
+VQL allows you to share responsibilities for working with data between professionals of different levels and different competencies, but it does not limit mono-developers.  
+
+
+## Thanks for the help
+
+*this section is still empty*
+
+
+## About the author
+
+The author of the project is Constantine Zavezeon (Kwynto).  
+You can contact the author by e-mail: kwynto@mail.ru  
+
