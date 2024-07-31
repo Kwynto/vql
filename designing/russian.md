@@ -310,11 +310,11 @@ ___
 ***Пример:***  
 ```vql
     use("shop", "customers")
-    $idsСustomers = where "age" >= 18 AND "city" == "Moscow" 
+    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" 
 ```
 ```vql
     use(shop, customers)
-    $idsСustomers = where age >= $1 AND city == $2 
+    $idsCustomers = where age >= $1 AND city == $2 
 ```
 ___
 
@@ -324,11 +324,11 @@ ___
 ***Пример:***  
 ```vql
     use("shop", "customers")
-    $idsСustomers = where "age" >= 18 AND "city" == "Moscow" limit 0, 100
+    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" limit 0, 100
 ```
 ```vql
     use(shop, customers)
-    $idsСustomers = where age >= $1 AND city == $2 limit 100, 100
+    $idsCustomers = where age >= $1 AND city == $2 limit 100, 100
 ```
 ___
 
@@ -338,15 +338,15 @@ ___
 ***Пример:***  
 ```vql
     use("shop", "customers")
-    $idsСustomers = where "age" >= 18 AND "city" == "Moscow" orderby "name" asc
+    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" orderby "name" asc
 ```
 ```vql
     use("shop", "customers")
-    $idsСustomers = where "age" >= 18 AND "city" == "Moscow" orderby "_id" desc
+    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" orderby "_id" desc
 ```
 ```vql
     use(shop, customers)
-    $idsСustomers = where age >= $1 AND city == $2 orderby age asc limit 0, 100
+    $idsCustomers = where age >= $1 AND city == $2 orderby age asc limit 0, 100
 ```
 ___
 
@@ -356,18 +356,18 @@ ___
 ***Пример:***  
 ```vql
     use("shop", "customers")
-    $idsСustomers = where "age" >= 18 AND "city" == "Moscow"
+    $idsCustomers = where "age" >= 18 AND "city" == "Moscow"
 
     transaction {
         use("shop", "sales")
-        $idsSales = where "customers_id" == $idsСustomers
+        $idsSales = where "customers_id" == $idsCustomers
         $err = update( {"geosale": $1}, $idsSales )
         if $err != 0 {
             rollback
         }
 
         use("shop", "customers")
-        $data, $err = select(["sumsale"], $idsСustomers)
+        $data, $err = select(["sumsale"], $idsCustomers)
         if $err != 0 {
             rollback
         }
@@ -395,15 +395,15 @@ ___
 ***Пример:***  
 ```vql
     use("shop", "customers")
-    $idsСustomers = where "age" >= 18 AND "city" == "Moscow" limit 0, 100
+    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" limit 0, 100
 
     $newTicket, $_ = verification()
 
     $res = ""
     if len($newTicket) == 0 {
-        $res = {"status": "ok", "data": $idsСustomers}
+        $res = {"status": "ok", "data": $idsCustomers}
     } else {
-        $res = {"status": "ok", "ticket": $newTicket, "data": $idsСustomers}
+        $res = {"status": "ok", "ticket": $newTicket, "data": $idsCustomers}
     }
 
     response $res
@@ -645,21 +645,21 @@ ___
 ***Пример:***  
 ```vql
     use("shop", "customers")
-    $idsСustomers = where "age" >= 18 AND "city" == "Moscow" limit 0, 100
+    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" limit 0, 100
 
-    $data, $err = select(["login", "name", "surname", "age", "city"], $idsСustomers)
+    $data, $err = select(["login", "name", "surname", "age", "city"], $idsCustomers)
 ```
 ```vql
     use($1, $2)
-    $idsСustomers = where "age" >= $3 AND "city" == $4 limit 0, 100
+    $idsCustomers = where "age" >= $3 AND "city" == $4 limit 0, 100
 
-    $data, $err = select(["login", "name", "surname", "age", "city"], $idsСustomers)
+    $data, $err = select(["login", "name", "surname", "age", "city"], $idsCustomers)
 ```
 ```vql
     use($1, $2)
-    $idsСustomers = where "age" >= $3 AND "city" == $4 limit 0, 100
+    $idsCustomers = where "age" >= $3 AND "city" == $4 limit 0, 100
 
-    $data, $err = select([], $idsСustomers)
+    $data, $err = select([], $idsCustomers)
 ```
 ```vql
     func selectAll( $nameDb string, $nameTab string) []{}, error {
@@ -704,21 +704,21 @@ ___
 ***Пример:***  
 ```vql
     use("shop", "customers")
-    $idsСustomers = where "city" == "Nur-Sultan"
+    $idsCustomers = where "city" == "Nur-Sultan"
     
-    $err = update( {"city": "Astana"}, $idsСustomers )
+    $err = update( {"city": "Astana"}, $idsCustomers )
 ```
 ```vql
     use($1, $2)
-    $idsСustomers = where "city" == $3
+    $idsCustomers = where "city" == $3
     
-    $err = update( {"city": $4}, $idsСustomers )
+    $err = update( {"city": $4}, $idsCustomers )
 ```
 ```vql
     func renameTheCity( $nameDb string, $nameTab string, $oldNameCity string, $newNameCity string ) error {
         use($nameDb, $nameTab)
-        $idsСustomers = where "city" == $oldNameCity
-        $err = update( {"city": $newNameCity}, $idsСustomers )
+        $idsCustomers = where "city" == $oldNameCity
+        $err = update( {"city": $newNameCity}, $idsCustomers )
         return $err
     }
 
@@ -734,9 +734,9 @@ ___
 ***Пример:***  
 ```vql
     use("shop", "customers")
-    $idsСustomers = where "ban" == true
+    $idsCustomers = where "ban" == true
     
-    $err = delete( $idsСustomers )
+    $err = delete( $idsCustomers )
 ```
 ___
 

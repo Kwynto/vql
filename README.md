@@ -16,16 +16,24 @@ VQL-24:1.0
         - [Русское](https://github.com/Kwynto/vql/blob/main/vql-24/russian.md) описание. 
 
 
+## Projects that support VQL
+|Project Name|Project Type|VQL version|Support level|
+|:-|:-:|:-:|:-:|
+|GracefulDB|DBMS|VQL-24:1.0|Development of the VQL-interpreter|
+
+
+## Thanks for the help
+
+*this section is still empty*  
+
+You can support this project and your name or the name of your company can take its place in our hall of fame. The details are [here](https://github.com/Kwynto/vql/blob/main/SUPPORT.md).
+
+
 ## Changelog 
 
 - 2024 Jul 3 - Publication of the first version of VQL-24:1.0 
 - 2024 Jun 1 - Create a repository and start working on the language. 
 - 2023 August - The beginning of experiments in creating a language for working with data. 
-
-
-## Thanks for the help
-
-*this section is still empty*
 
 
 ## About the author
