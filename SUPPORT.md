@@ -4,7 +4,7 @@
 ## Usage.
 The most important support for VQL is the use of this language in real projects.  
 If you can include VQL support in your project, then do it.  
-Tell the author of this repository that your project supports VQL, and I will put your project in the "Projects that support VQL" section.  
+Tell the author of this repository that your project supports VQL, and I will put your project in the "**Projects that support VQL**" section.  
 
 
 ## Recommendations
@@ -15,7 +15,7 @@ Such support is also very important for the development of this language. This w
 ## Sponsorship
 And finally, there is another way to help the project.  
 This is direct financial assistance for any amount.  
-Financial assistance can be anonymous or public. I can put your name, the name of your company or its logo in the "Thanks for the help" section.  
+Financial assistance can be anonymous or public. I can put your name, the name of your company or its logo in the "**Thanks for the help**" section.  
 
 You can make your donations for the development of open and free software in Bitcoin.  
 
