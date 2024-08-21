@@ -5,13 +5,13 @@ This is a description of a vulgar query language (VQL) for database management s
 VQL is a simple imperative language for working with databases, free from frills and helping to create simple, understandable and effective database queries.  
 
 ***Revision:*** 
-VQL-24:1.0  
+VQL-24:1.1  
 
 
 ## Language Description 
 
 - **VQL-24** (the first version): 
-    - Revision **VQL-24:1.0**: 
+    - Revision **VQL-24:1.1**: 
         - [English](https://github.com/Kwynto/vql/blob/main/vql-24/english.md) description. 
         - [Русское](https://github.com/Kwynto/vql/blob/main/vql-24/russian.md) описание. 
 
@@ -19,7 +19,7 @@ VQL-24:1.0
 ## Projects that support VQL
 |Project Name|Project Type|VQL version|Support level|
 |:-|:-:|:-:|:-:|
-|[GracefulDB](https://github.com/Kwynto/GracefulDB)|DBMS|VQL-24:1.0|Development of the VQL-interpreter|
+|[GracefulDB](https://github.com/Kwynto/GracefulDB)|DBMS|VQL-24:1.1|Development of the VQL-interpreter|
 
 
 ## Thanks for the help
@@ -31,8 +31,9 @@ You can support this project and your name or the name of your company can take 
 
 ## Changelog 
 
-- 2024 Jul 3 - Publication of the first version of VQL-24:1.0 
-- 2024 Jun 1 - Create a repository and start working on the language. 
+- 2024 Aug 21 - Corrections have been made and version VQL-24:1.1 has been published 
+- 2024 Jul 3  - Publication of the first version of VQL-24:1.0 
+- 2024 Jun 1  - Create a repository and start working on the language. 
 - 2023 August - The beginning of experiments in creating a language for working with data. 
 
 
