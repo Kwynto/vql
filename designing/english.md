@@ -5,7 +5,7 @@ This is a description of a vulgar query language (VQL) for database management s
 VQL is a simple imperative language for working with databases, free from frills and helping to create simple, understandable and effective database queries.  
 
 ***Revision:*** 
-VQL-24:1  
+VQL-24:1.1  
 
 **_This repository is under development._**  
 
@@ -66,59 +66,49 @@ VQL-24:1
     - The function can be removed from the database by the forget funcName directive 
     - Each database has its own set of stored functions 
     - If, when saving a new function, the function name is already occupied, then the old function is deleted from the database, and the new one is written 
-    - Function names must match the pattern `[a-zA-Z][a-zA-Z0-9_-]+` 
+    - Function names must match the pattern `[a-zA-Z][a-zA-Z0-9_]+` 
 - The block of operations is indicated by the symbols "{" and "}", that is, the beginning and end of the block of operations are indicated in this way 
     - The block of operations is the body of the function description 
     - The block of operations is the body of the loop 
     - The block of operations can be declared arbitrarily anywhere in the query script, forming an anonymous function 
         - An anonymous function can be used as a right operand and return a value with the return directive 
         - An anonymous function can return a value and write the result of execution to a variable of the left operand, but its internal code cannot be assigned to a variable for further invocation 
-- VQL assumes the use of variables that must start with the $ symbol and match the pattern `\$[a-zA-Z0-9_-]+` 
+- VQL assumes the use of variables that must start with the $ symbol and match the pattern `\$[a-zA-Z0-9_]+` 
     - Variables are intended for temporary storage of data during query execution 
     - Variables do not require prior declaration or initialization 
     - A variable is considered declared and initialized after any mention of this variable in the left operand of any operation 
 - The request can accept variables from the user 
-    - The names of the incoming variables must match the pattern `\$[a-zA-Z0-9_-]+`, that is, like any other variables 
+    - The names of the incoming variables must match the pattern `\$[a-zA-Z0-9_]+`, that is, like any other variables 
     - Incoming variables are passed to the request in JSON format as objects, where the key is the name of the variable and the value is the contents of the variable 
-- Operations can use pipelines, that is, data from the execution of one request is transmitted as input to the next request 
-    - The pipeline is indicated by the symbol "|" between requests and corresponds to the pattern `\s*|\s*` 
-    - Requests in the pipeline can be on different lines, or on the same
-line - The response from the left part of the pipeline operation is passed to the right part and fills in the fields of the arguments of the input function from left to right 
-    - If the number of returned values from the left part of the pipeline exceeds the number of arguments from the right part, then only those values that are provided by the right part of the pipeline operation are filled in 
-    - If the returned values of the pipeline operation are not enough to fill in the arguments, an error is generated and the execution of the entire request is terminated 
-    - The lack of filling in the arguments of the right side of the pipeline operation can be compensated by directly filling in the arguments 
-    - A complete pipeline can contain many pipeline operations in which data is transferred from one operation to another 
-    - The result of the pipeline execution can be passed to the variable of the left operand on the first line of the pipeline 
 - VQL supports assignment, comparison, logical operations, arithmetic operations and string concatenation 
-    - Assignment is indicated by the symbol "="
-- To the left of the assignment sign is the receiving variable and nothing else 
+    - Assignment is indicated by the symbol "=" 
+        - To the left of the assignment sign is the receiving variable and nothing else 
             - If there is no variable to the left of the assignment sign, then the data is passed to the standard reserved variable $result 
             - If the $result variable was used earlier, the data of this variable will be overwritten 
         - To the right of the assignment sign is the data source 
             - The data source can be a variable 
             - The data source can be a custom function 
             - The data source can be a directive or a standard function 
-            - The data source can be a pipeline after all its pipeline operations have been performed 
     - Comparison operations 
-        - Greater than: ">"
-- Less than: "<"
-- Equal to: "=="
-- Greater than or equal to: ">="
-- Less than or equal to: "<="
-- Logical operations 
+        - Greater than: ">" 
+        - Less than: "<" 
+        - Equal to: "==" 
+        - Greater than or equal to: ">=" 
+        - Less than or equal to: "<=" 
+    - Logical operations 
         - Logical AND: "&&"
-- Logical OR: "||"
-- Logical IS NOT: "!" 
+        - Logical OR: "||"
+        - Logical IS NOT: "!" 
     - Arithmetic operations only support integer calculations 
         - Addition: "+"
-- Subtraction: "-"
-- Multiplication: "*"
-- Division without remainder: "/"
-- Remainder of division: "%"
-- Exponentiation: "^"
-- Increase by one: "++"
-- Decrease by one: "--"
-- String concatenation 
+        - Subtraction: "-"
+        - Multiplication: "*"
+        - Division without remainder: "/"
+        - Remainder of division: "%"
+        - Exponentiation: "^"
+        - Increase by one: "++"
+        - Decrease by one: "--"
+    - String concatenation 
         - Addition of strings: "."
 - The operation can start with any number of space or tab characters, these characters do not carry any lexical meaning and are only needed for a beautiful design of the request body 
 - There can be any number of space or tab characters between operands in an operation 
@@ -130,7 +120,7 @@ line - The response from the left part of the pipeline operation is passed to th
 - Procedures (functions that do not return data) do not make sense in VQL and are not used 
 - If a function or directive is called without assigning a value to a variable, the result is placed in the service variable $result 
 - Function signature:
-- func function_name(argument1, argument2, other arguments) return_value {} 
+    - func function_name(argument1, argument2, other arguments) return_value {} 
     - func function_name(argument1, argument2, other arguments) (value1, value2, ...) {} 
 - Non-operational data, called comments, may be recorded in the request. The beginning of the comment is indicated by a combination of characters "//" and continues to the end of the line.
 
@@ -142,7 +132,7 @@ VQL does not require variable typing or data typing, but the data types themselv
 |Type|Designation|Description|
 |:-|:-|:-|
 |any||Any type|
-|atom|[a-zA-Z][a-zA-Z0-9_-]+|Any designation that is both a proper name and a proper meaning|
+|atom|[a-zA-Z][a-zA-Z0-9_]+|Any designation that is both a proper name and a proper meaning|
 |boolean|true false|The elements of logic are a kind of atoms|
 |number|[0-9]+|A number, a kind of atom that is both a proper name and a proper value|
 |error|[0-9]+|A special type for storing the error code as a number, can be interpreted as a number and used in arithmetic operations|
