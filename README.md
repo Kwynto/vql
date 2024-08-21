@@ -14,6 +14,7 @@ VQL-24:1.1
     - Revision **VQL-24:1.1**: 
         - [English](https://github.com/Kwynto/vql/blob/main/vql-24/english.md) description. 
         - [Русское](https://github.com/Kwynto/vql/blob/main/vql-24/russian.md) описание. 
+    - Revision **VQL-24:1.0**: it has lost its relevance 
 
 
 ## Projects that support VQL
