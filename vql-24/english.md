@@ -5,7 +5,7 @@ This is a description of a vulgar query language (VQL) for database management s
 VQL is a simple imperative language for working with databases, free from frills and helping to create simple, understandable and effective database queries.  
 
 ***Revision:*** 
-VQL-24:1.1  
+VQL-24:1.2  
 
 
 ## List of terms: 
@@ -119,7 +119,7 @@ VQL-24:1.1
 - If a function or directive is called without assigning a value to a variable, the result is placed in the service variable $result 
 - Function signature:
     - func function_name(argument1, argument2, other arguments) return_value {} 
-    - func function_name(argument1, argument2, other arguments) (value1, value2, ...) {} 
+    - func function_name(argument1, argument2, other arguments) value1, value2, ... {} 
 - Non-operational data, called comments, may be recorded in the request. The beginning of the comment is indicated by a combination of characters "//" and continues to the end of the line.
 
 
@@ -151,14 +151,14 @@ ___
 ***Example:***  
 ```vql
     func ifNotExists($db string, $table, $columns []string) error {
-        $err = create-db($db)
+        $err = createDB($db)
         if $err != 0 {
             return $err
         }
 
         use($db, "")
 
-        $err = create-table($table,  $columns)
+        $err = createTable($table,  $columns)
         if $err != 0 {
             return $err
         }
@@ -191,14 +191,14 @@ ___
 ***Example:***  
 ```vql
     func ifNotExists($db string, $table, $columns []string) error {
-        $err = create-db($db)
+        $err = createDB($db)
         if $err != 0 {
             return $err
         }
         
         use($db, "")
 
-        $err = create-table($table,  $columns)
+        $err = createTable($table,  $columns)
         if $err != 0 {
             return $err
         }
@@ -298,11 +298,11 @@ ___
 ***Example:***  
 ```vql
     use("shop", "customers")
-    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" 
+    $idsCustomers = where "age" >= 18 && "city" == "Moscow" 
 ```
 ```vql
     use(shop, customers)
-    $idsCustomers = where age >= $1 AND city == $2 
+    $idsCustomers = where age >= $1 && city == $2 
 ```
 ___
 
@@ -312,11 +312,11 @@ ___
 ***Example:***  
 ```vql
     use("shop", "customers")
-    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" limit 0, 100
+    $idsCustomers = where "age" >= 18 && "city" == "Moscow" limit 0, 100
 ```
 ```vql
     use(shop, customers)
-    $idsCustomers = where age >= $1 AND city == $2 limit 100, 100
+    $idsCustomers = where age >= $1 && city == $2 limit 100, 100
 ```
 ___
 
@@ -326,15 +326,15 @@ ___
 ***Example:***  
 ```vql
     use("shop", "customers")
-    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" orderby "name" asc
+    $idsCustomers = where "age" >= 18 && "city" == "Moscow" orderby "name" asc
 ```
 ```vql
     use("shop", "customers")
-    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" orderby "_id" desc
+    $idsCustomers = where "age" >= 18 && "city" == "Moscow" orderby "_id" desc
 ```
 ```vql
     use(shop, customers)
-    $idsCustomers = where age >= $1 AND city == $2 orderby age asc limit 0, 100
+    $idsCustomers = where age >= $1 && city == $2 orderby age asc limit 0, 100
 ```
 ___
 
@@ -344,7 +344,7 @@ ___
 ***Example:***  
 ```vql
     use("shop", "customers")
-    $idsCustomers = where "age" >= 18 AND "city" == "Moscow"
+    $idsCustomers = where "age" >= 18 && "city" == "Moscow"
 
     transaction {
         use("shop", "sales")
@@ -383,7 +383,7 @@ ___
 ***Example:***  
 ```vql
     use("shop", "customers")
-    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" limit 0, 100
+    $idsCustomers = where "age" >= 18 && "city" == "Moscow" limit 0, 100
 
     $newTicket, $_ = verification()
 
@@ -431,7 +431,7 @@ ___
 ```
 ___
 
-##### func log($level string, $v any) boolean
+##### func log( \$level string, \$v any) boolean
 ***Name:*** log  
 ***Arguments:*** logging level and any value  
 ***Return value:*** indicates that the operation is being performed  
@@ -462,161 +462,161 @@ ___
 
 ___
 
-##### func create-db( \$db string ) error 
-***Name:*** create-db  
+##### func createDB( \$db string ) error 
+***Name:*** createDB  
 ***Arguments:*** database name  
 ***Return value:*** Error code  
 ***Description:*** Creating a database with a given name.  
 ***Example:***  
 ```vql
-    $err = create-db("dbName")
+    $err = createDB("dbName")
 ```
 ```vql
-    $err = create-db($1)
+    $err = createDB($1)
 ```
 ___
 
-##### func create-table( \$table string, \$columns []string) error 
-***Name:*** create-table  
+##### func createTable( \$table string, \$columns []string) error 
+***Name:*** createTable  
 ***Arguments:*** table name and array of rows with column names  
 ***Return value:*** Error code  
 ***Description:*** Creating a table with a given name and a set of specified columns. Before executing, it is necessary to execute use(dbName, "").  
 ***Example:***  
 ```vql
     use("dbName", "")
-    $err = create-table("tableName", ["name", "age", "sex", "prof", "comment"])
+    $err = createTable("tableName", ["name", "age", "sex", "prof", "comment"])
 ```
 ```vql
     use($1, "")
-    $err = create-table($2, $3)
+    $err = createTable($2, $3)
 ```
 ___
 
-##### func alter-db-rename( \$oldName string, \$newName string ) error 
-***Name:*** alter-db-rename  
+##### func alterDBRename( \$oldName string, \$newName string ) error 
+***Name:*** alterDBRename  
 ***Arguments:*** old and new database name  
 ***Return value:*** Error code  
 ******Description:*** Changing the database name.  
 ***Example:***  
 ```vql
-    $err = alter-db-rename("dbName", "newDbName")
+    $err = alterDBRename("dbName", "newDbName")
 ```
 ```vql
-    $err = alter-db-rename($1, $2)
+    $err = alterDBRename($1, $2)
 ```
 ___
 
-##### func alter-table-rename( \$oldName string, \$newName string ) error 
-***Name:*** alter-table-rename  
+##### func alterTableRename( \$oldName string, \$newName string ) error 
+***Name:*** alterTableRename  
 ***Arguments:*** old and new table name  
 ***Return value:*** Error code  
 ***Description:*** Changing the name of the table in the melon database.  
 ***Example:***  
 ```vql
     use("dbName", "")
-    $err = alter-table-rename("tableName", "newTableName")
+    $err = alterTableRename("tableName", "newTableName")
 ```
 ```vql
     use("dbName", "")
-    $err = alter-table-rename($1, $2)
+    $err = alterTableRename($1, $2)
 ```
 ___
 
-##### func alter-table-add( \$colName string, \$sett object ) error 
-***Name:*** alter-table-add  
+##### func alterTableAdd( \$colName string, \$sett object ) error 
+***Name:*** alterTableAdd  
 ***Arguments:*** the name of the new column in the table and its characteristics  
 ***Return value:*** Error code  
 ***Description:*** Adding a new column to the current worksheet. The column characteristics can be an empty object, or filled in in various ways depending on the capabilities of the DBMS.  
 ***Example:***  
 ```vql
     use("shop", "customers")
-    $err = alter-table-add("city", {})
+    $err = alterTableAdd("city", {})
 ```
 ```vql
     use("shop", "customers")
-    $err = alter-table-add("city", {"Default": "Moscow", "NotNull": true, "Unique": false} )
+    $err = alterTableAdd("city", {"Default": "Moscow", "NotNull": true, "Unique": false} )
 ```
 ```vql
     use($1, $2)
-    $err = alter-table-add($3, $4)
+    $err = alterTableAdd($3, $4)
 ```
 ___
 
-##### func alter-table-drop( \$colName string ) error 
-***Name:*** alter-table-drop  
+##### func alterTableDrop( \$colName string ) error 
+***Name:*** alterTableDrop  
 ***Arguments:*** name of the column to delete in the table  
 ***Return value:*** Error code  
 ***Description:*** Deleting a column from the current worksheet.  
 ***Example:***  
 ```vql
     use("shop", "customers")
-    $err = alter-table-drop("city")
+    $err = alterTableDrop("city")
 ```
 ```vql
     use($1, $2)
-    $err = alter-table-drop($3)
+    $err = alterTableDrop($3)
 ```
 ___
 
-##### func alter-table-modify( \$colName string, \$sett object ) error 
-***Name:*** alter-table-modify  
+##### func alterTableModify( \$colName string, \$sett object ) error 
+***Name:*** alterTableModify  
 ***Arguments:*** the name of the column being modified in the table and a set of its characteristics  
 ***Return value:*** Error code  
 ***Description:*** Changing the set of column characteristics from the current worksheet.  
 ***Example:***  
 ```vql
     use("shop", "customers")
-    $err = alter-table-modify("city", {"Default": "Moscow", "NotNull": true, "Unique": false} )
+    $err = alterTableModify("city", {"Default": "Moscow", "NotNull": true, "Unique": false} )
 ```
 ```vql
     use($1, $2)
-    $err = alter-table-modify($3, $4)
+    $err = alterTableModify($3, $4)
 ```
 ___
 
-##### func alter-table-modify-rename( \$colOldName string, \$colNewName string ) error 
-***Name:*** alter-table-modify-rename  
+##### func alterTableModifyRename( \$colOldName string, \$colNewName string ) error 
+***Name:*** alterTableModifyRename  
 ***Arguments:*** old and new column name  
 ***Return value:*** Error code  
 ***Description:*** Renaming a column from the current worksheet.  
 ***Example:***  
 ```vql
     use("manage", "users")
-    $err = alter-table-modify-rename("login", "username" )
+    $err = alterTableModifyRename("login", "username" )
 ```
 ```vql
     use($1, $2)
-    $err = alter-table-modify-rename($3, $4)
+    $err = alterTableModifyRename($3, $4)
 ```
 ___
 
-##### func drop-db( \$db string ) error 
-***Name:*** drop-db  
+##### func dropDB( \$db string ) error 
+***Name:*** dropDB  
 ***Arguments:*** database name  
 ***Return value:*** Error code  
 ***Description:*** Deleting a database with the specified name.  
 ***Example:***  
 ```vql
-    $err = drop-db("dbName")
+    $err = dropDB("dbName")
 ```
 ```vql
-    $err = drop-db($1)
+    $err = dropDB($1)
 ```
 ___
 
-##### func drop-table( \$table string ) error 
-***Name:*** drop-table  
+##### func dropTable( \$table string ) error 
+***Name:*** dropTable  
 ***Arguments:*** table name  
 ***Return value:*** Error code  
 ***Description:*** Deleting a table with the specified name from the current working database.  
 ***Example:***  
 ```vql
     use("dbName", "")
-    $err = drop-table("tableName")
+    $err = dropTable("tableName")
 ```
 ```vql
     use($1, "")
-    $err = drop-table($2)
+    $err = dropTable($2)
 ```
 ___
 
@@ -633,19 +633,19 @@ ___
 ***Example:***  
 ```vql
     use("shop", "customers")
-    $idsCustomers = where "age" >= 18 AND "city" == "Moscow" limit 0, 100
+    $idsCustomers = where "age" >= 18 && "city" == "Moscow" limit 0, 100
 
     $data, $err = select(["login", "name", "surname", "age", "city"], $idsCustomers)
 ```
 ```vql
     use($1, $2)
-    $idsCustomers = where "age" >= $3 AND "city" == $4 limit 0, 100
+    $idsCustomers = where "age" >= $3 && "city" == $4 limit 0, 100
 
     $data, $err = select(["login", "name", "surname", "age", "city"], $idsCustomers)
 ```
 ```vql
     use($1, $2)
-    $idsCustomers = where "age" >= $3 AND "city" == $4 limit 0, 100
+    $idsCustomers = where "age" >= $3 && "city" == $4 limit 0, 100
 
     $data, $err = select([], $idsCustomers)
 ```
@@ -760,62 +760,62 @@ ___
 ```
 ___
 
-##### func auth-secure( \$login string, \$hash string ) string
-***Name:*** auth-secure  
+##### func authSecure( \$login string, \$hash string ) string
+***Name:*** authSecure  
 ***Arguments:*** login and password hash  
 ***Return value:*** ticket  
 ***Description:*** Authorizes the user, accepts the username and password hash, and returns the ticket string for further work with the DBMS.  
 ***Example:***  
 ```vql
-    $ticket = auth-secure("root", "1b4f0e9851971998e732078544c96b36c3d01cedf7caa332359d6f1d83567014")
+    $ticket = authSecure("root", "1b4f0e9851971998e732078544c96b36c3d01cedf7caa332359d6f1d83567014")
 ```
 ```vql
-    $ticket = auth-secure($1, $2)
+    $ticket = authSecure($1, $2)
 ```
 ___
 
-##### func auth-new( \$login string, \$password string ) error
-***Name:*** auth-new  
+##### func authNew( \$login string, \$password string ) error
+***Name:*** authNew  
 ***Arguments:*** login and password  
 ***Return value:*** Error code  
 ***Description:*** Adds a new user, without privileges. Accepts a username and an unhashed password, and returns formal signs of completion.  
 ***Example:***  
 ```vql
-    $err = auth-new("test1", "test1")
+    $err = authNew("test1", "test1")
 ```
 ```vql
-    $err = auth-new($1, $2)
+    $err = authNew($1, $2)
 ```
 ___
 
-##### func auth-remove( \$login string ) error
-***Name:*** auth-remove  
+##### func authRemove( \$login string ) error
+***Name:*** authRemove  
 ***Arguments:*** login  
 ***Return value:*** Error code  
 ***Description:*** Deletes the user. Accepts the login, and returns the formal signs of the operation.  
 ***Example:***  
 ```vql
-    $err = auth-remove("test1")
+    $err = authRemove("test1")
 ```
 ```vql
-    $err = auth-remove($1)
+    $err = authRemove($1)
 ```
 ___
 
-##### func auth-change( \$login string, \$password string, \$roles []string ) error
-***Name:*** auth-change  
+##### func authChange( \$login string, \$password string, \$roles []string ) error
+***Name:*** authChange  
 ***Arguments:*** login, password, list of new roles  
 ***Return value:*** Error code  
 ***Description:*** Changes the password for the user and his role within the DBMS. Accepts a username, a new unencrypted password and a list of roles, and returns formal signs of fulfillment.  
 ***Example:***  
 ```vql
-    $err = auth-change("test1", "test1", ["ADMIN", "ENGINEER", "MANAGER", "USER"])
+    $err = authChange("test1", "test1", ["ADMIN", "ENGINEER", "MANAGER", "USER"])
 ```
 ```vql
-    $err = auth-change(test1, test1, [ADMIN, ENGINEER, MANAGER, USER])
+    $err = authChange(test1, test1, [ADMIN, ENGINEER, MANAGER, USER])
 ```
 ```vql
-    $err = auth-change($1, $2, $3)
+    $err = authChange($1, $2, $3)
 ```
 ___
 
@@ -836,31 +836,31 @@ ___
 ```
 ___
 
-##### func show-dbs() []string, error
-***Name:*** show-dbs  
+##### func showDBs() []string, error
+***Name:*** showDBs  
 ***Arguments:***  
 ***Return value:*** array of strings and error code  
 ***Description:*** Returns the names of all databases maintained by this DBMS instance.  
 ***Example:***  
 ```vql
-    $dbs, $err = show-dbs()
+    $dbs, $err = showDBs()
 ```
 ```vql
-    $dbs, $err = show-dbs()
+    $dbs, $err = showDBs()
 ```
 ___
 
-##### func show-tables() []string, error
-***Name:*** show-tables  
+##### func showTables() []string, error
+***Name:*** showTables  
 ***Arguments:***  
 ***Return value:*** array of strings and error code  
 ***Description:*** Returns the names of all tables in the current database.  
 ***Example:***  
 ```vql
-    $dbs, $err = show-tables()
+    $dbs, $err = showTables()
 ```
 ```vql
-    $dbs, $err = show-tables()
+    $dbs, $err = showTables()
 ```
 ___
 
